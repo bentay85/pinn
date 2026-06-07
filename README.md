@@ -21,7 +21,7 @@ uv run 1_Forward_Euler.py
 
 ### Scripts
 
-All the scripts are in the root directory so you can run them one by one. The graphs that are generated are saved to a graphs directory. Technical details about what each of the scrips do are discussed within the my blog post.  
+All the scripts are in the root directory so you can run them one by one. The graphs that are generated are saved to a graphs directory. Technical details about what each of the scrips do are discussed within the my [blog post](https://bentay85.github.io/2026/06/07/pinn.html).  
 
 * 1_Forward_Euler.py  
 * 2_pinn_simulate.py  
