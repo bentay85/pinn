@@ -23,6 +23,5 @@ All the scripts are in the root directory so you can run them one by one. The gr
 
 ### Scripts
 
-1. 1_Forward_Euler.py: Simulates the system using a state-space representation solved via the **Forward Euler** method. Compares numerical results directly against the analytical solution to check for accuracy.  
- 
-2. 2_pinn_simulate.py: Uses a PINN to simulate the system. There is no training data. The boundary conditions and physics are used to propagate the loss through the network at each step. 
+1. 1_Forward_Euler.py  
+2. 2_pinn_simulate.py  

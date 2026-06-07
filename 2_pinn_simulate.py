@@ -13,22 +13,23 @@ torch.manual_seed(42)
 print(f"\n[SYSTEM] Active Execution Device: {device.type.upper()}")
 if device.type == "cuda":
     print(f"[SYSTEM] GPU Name: {torch.cuda.get_device_name(0)}")
-print("-" * 65)
 
 # Ensure the output directory for plots exists
 os.makedirs("graphs", exist_ok=True)
 
 # 2. Define PINN Architecture
+# tanh is used as we need the network to be differentiable
+# A very simple fully connected network which takes in time and outputs the position of the mass. 
+# It has one input layer, one hidden layer with 64 neurons and one output layer. 
 class PINN(nn.Module):
     def __init__(self):
         super().__init__()
-        # 50 neurons per layer provides adequate capacity for stiff ODE landscapes
         self.net = nn.Sequential(
-            nn.Linear(1, 50),
+            nn.Linear(1, 64),
             nn.Tanh(),
-            nn.Linear(50, 50),
+            nn.Linear(64, 64),
             nn.Tanh(),
-            nn.Linear(50, 1),
+            nn.Linear(64, 1),
         )
 
     def forward(self, t):
@@ -42,7 +43,8 @@ learning_rate = 1e-3
 optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
 # 4. Setup Training and Domain Tensors
-epochs = 15000  # Adam requires more iterations than L-BFGS to converge on stiff landscapes
+# number of epochs was set based on a previous run that shows covergence at epoch 15000
+epochs = 15000
 plot_every = 1000
 
 # Boundary condition anchors at t=0
@@ -65,7 +67,7 @@ x_analytical = (
 )
 
 # 5. Training Loop
-print(f"Optimizing stiff landscape via Adam Engine...\n{'='*65}")
+print("Training Loop")
 
 model.train()
 for epoch in range(1, epochs + 1):
@@ -96,13 +98,17 @@ for epoch in range(1, epochs + 1):
     )[0]
 
     # --- Compute Weighted Losses ---
+    # squared error. we do not take mean as there is only a single point
+    #initial conditions are: x_zero = 1 and dx/dt (0) = 0
     loss_ic1 = (x_zero - 1.0).pow(2).sum()
     loss_ic2 = dx_dt_zero.pow(2).sum()
 
     # Residual calculation for: d2x/dt2 + 4*dx/dt + 400*x = 0
     ode_residual = d2xdt2 + 4 * dxdt + 400 * x_p
+    #mean squared error is calculated
     loss_physics = torch.mean(ode_residual**2)
-
+    
+    # ic1 and ic2 loss are multiplied by 5000. This is a hyperparameter which determines the relative weight of the initial condition and physics losses. 
     total_loss = 5000 * (loss_ic1 + loss_ic2) + loss_physics
 
     # Backpropagation
@@ -118,7 +124,7 @@ for epoch in range(1, epochs + 1):
             f"IC Loss: {(loss_ic1+loss_ic2).item():.6e}"
         )
 
-        # Plot current state vs analytical reference
+        # Plot output of model vs analytical reference
         model.eval()
         with torch.no_grad():
             x_pinn = model(t_eval).cpu().numpy()
@@ -156,4 +162,4 @@ for epoch in range(1, epochs + 1):
         plt.close(fig)
 
 print(f"\nTotal Iterations: {epochs}")
-print(f"Final Total Loss: {total_loss.item():.6e}\n{'='*65}")
+print(f"Final Total Loss: {total_loss.item():.6e}")
