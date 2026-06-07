@@ -1,7 +1,5 @@
 import os
 import matplotlib
-# Use non-interactive backend to prevent GUI initialization and rendering overhead
-matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import torch
 import torch.nn as nn
