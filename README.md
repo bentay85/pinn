@@ -23,5 +23,6 @@ All the scripts are in the root directory so you can run them one by one. The gr
 
 ### Scripts
 
-1. 1_Forward_Euler.py  
-2. 2_pinn_simulate.py  
+* 1_Forward_Euler.py  
+* 2_pinn_simulate.py  
+* 3_pinn_data.py
