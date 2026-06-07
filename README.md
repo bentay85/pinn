@@ -1,6 +1,6 @@
 # Physics-Informed Neural Networks (PINNs)
 
-Link to blog post: [link](https://bentay85.github.io/2026/06/07/pinn.html)
+Link to blog post, which goes into more about the mass-spring-damper system that I am using the PINNs to analyse: [link](https://bentay85.github.io/2026/06/07/pinn.html)
 
 Steve Brunton's video about Physics-Informed Neural Networks: [link](https://www.youtube.com/watch?v=-zrY7P2dVC4)  
 
@@ -19,10 +19,11 @@ uv sync
 uv run 1_Forward_Euler.py
 ```
 
-All the scripts are in the root directory so you can run them one by one. The graphs are saved to a graphs directory. 
-
 ### Scripts
+
+All the scripts are in the root directory so you can run them one by one. The graphs that are generated are saved to a graphs directory. Technical details about what each of the scrips do are discussed within the my blog post.  
 
 * 1_Forward_Euler.py  
 * 2_pinn_simulate.py  
 * 3_pinn_data.py
+* 4_pinn_unknown_parameters.py
