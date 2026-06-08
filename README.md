@@ -27,3 +27,4 @@ All the scripts are in the root directory so you can run them one by one. The gr
 * 2_pinn_simulate.py  
 * 3_pinn_data.py
 * 4_pinn_unknown_parameters.py
+* 5_pinn_unknown_parameter_auto_weight.py
